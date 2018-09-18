@@ -44,37 +44,54 @@
             <input type="submit" name="submitopen" value="Open File">
         </form>
         <br/>
-        <br/> File Contents:<br/>
+        <div>
+        	<br/> File Contents:<br/>	
+        </div>
+        
 
         <?php
         error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
         if (isset($_POST)){
             if ($_POST['submitsave'] == "Save Text"  && !empty($_POST['filename'])) {
-                if(!file_exists($_POST['filename'] . ".txt")){
+                if(!file_exists("notes/" . $_POST['filename'] . ".txt")){
                     $file = tmpfile();
                 }
-                $file = fopen($_POST['filename'] . ".txt","a+");
+                $file = fopen("notes/" . $_POST['filename'] . ".txt","a+");
                 while(!feof($file)){
                     $old = $old . fgets($file). "";
                 }
                 $text = $_POST["textdata"];
-                file_put_contents($_POST['filename'] . ".txt", $old . $text);
+                file_put_contents("notes/" . $_POST['filename'] . ".txt", $old . $text);
                 fclose($file);
             }
 
             if ($_POST['submitopen'] == "Open File") {
-                if(!file_exists($_POST['filename'] . ".txt")){
+                if(!file_exists("notes/" . $_POST['filename'] . ".txt")){
                     exit("Error: File does not exist.");
                 }
-                $file = fopen($_POST['filename'] . ".txt", "r");
+                $file = fopen("notes/" . $_POST['filename'] . ".txt", "r");
                 while(!feof($file)){
-                    echo fgets($file). "<br />";
+                    echo '<textarea rows="16" cols="100" name="textdata" placeholder="Your text">' . 
+                    		fgets($file) . 
+                    	  '</textarea><br />';
                 }
                 fclose($file);
             }
+
+
+			if ($handler = opendir("notes")) {
+				$results = array();
+
+			    while ($file = readdir($handler)) {
+			        if ($file != '.' && $file != '..')
+			            echo "<br><br>Directory list:<br>" . $results[] = $file;
+			    }
+			    closedir($handler);
+			}
         }
         ?>
+
     </body>
 
 </html>
