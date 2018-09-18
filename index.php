@@ -82,10 +82,12 @@
 
 			if ($handler = opendir("notes")) {
 				$results = array();
-
+				
+			    echo "<br><br>Directory list:<br>";
+				
 			    while ($file = readdir($handler)) {
 			        if ($file != '.' && $file != '..')
-			            echo "<br><br>Directory list:<br>" . $results[] = $file;
+			            echo $results[] = $file . "</b>";
 			    }
 			    closedir($handler);
 			}
